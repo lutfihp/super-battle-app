@@ -26,3 +26,9 @@ export function runBattle(teamA: string[], teamB: string[]): Promise<BattleRespo
     body: JSON.stringify({ team_a: teamA, team_b: teamB }),
   })
 }
+
+export type StatsResponse = { battles_cached: number; characters_loaded: number }
+
+export function getStats(): Promise<StatsResponse> {
+  return apiFetch<StatsResponse>('/api/stats')
+}
