@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Character } from '@/lib/types'
 import { getPopularCharacters, runBattle } from '@/lib/api'
 import { CharacterCard } from '@/components/CharacterCard'
@@ -105,22 +106,42 @@ export default function HomePage() {
 
       <main style={{ maxWidth: 'var(--maxw)', margin: '0 auto', padding: '0 var(--gutter) 80px' }}>
         {/* Header */}
-        <header style={{ textAlign: 'center', padding: '48px 0 40px' }}>
-          <h1
-            style={{
-              fontFamily: 'var(--font-title)',
-              fontSize: 'clamp(56px, 10vw, 96px)',
-              color: 'var(--gold)',
-              textShadow: '0 0 40px var(--gold-glow)',
-              lineHeight: 1,
-              marginBottom: '8px',
-            }}
-          >
-            SUPERBATTLE
-          </h1>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text-muted)', letterSpacing: '0.12em' }}>
-            PICK YOUR DC CHAMPIONS. LET THEM FIGHT.
-          </p>
+        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', padding: '48px 0 40px' }}>
+          <div>
+            <h1
+              style={{
+                fontFamily: 'var(--font-title)',
+                fontSize: 'clamp(46px, 8vw, 96px)',
+                color: 'var(--gold)',
+                textShadow: '0 0 40px var(--gold-glow)',
+                lineHeight: 1,
+                marginBottom: '4px',
+              }}
+            >
+              SUPERBATTLE
+            </h1>
+            <div style={{ width: '64px', height: '1px', background: 'linear-gradient(to right, var(--gold), transparent)' }} />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+            <Link
+              href="/how-it-works"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                color: 'var(--text-muted)',
+                letterSpacing: '0.14em',
+                textDecoration: 'none',
+                textTransform: 'uppercase',
+              }}
+              onMouseEnter={e => (e.currentTarget.style.color = 'var(--gold)')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}
+            >
+              How it works
+            </Link>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text-muted)', letterSpacing: '0.12em' }}>
+              PICK YOUR DC CHAMPIONS. LET THEM FIGHT.
+            </p>
+          </div>
         </header>
 
         {/* Section 01 — Roster */}
