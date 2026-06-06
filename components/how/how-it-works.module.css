@@ -1,0 +1,548 @@
+/* Ported from design_reference/how-it-works.css.
+   Local tokens are defined on .howRoot so they cascade to all children.
+   Global tokens (--gold, --surface, etc.) come from app/globals.css. */
+
+.howRoot {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  /* local tokens */
+  --_deep: #060810;
+  --_dim: rgba(232, 234, 240, 0.72);
+  --_sp2: 8px;  --_sp3: 12px; --_sp4: 16px; --_sp5: 24px;
+  --_sp6: 32px; --_sp7: 48px; --_sp8: 64px; --_sp9: 96px;
+  --_rSm: 3px;  --_rMd: 4px;
+  --_dFast: 140ms;
+}
+
+/* JetBrains Mono applied via --font-code CSS var set by the page component */
+.howRoot :global(code),
+.howPromptBody,
+.howCodeLine {
+  font-family: var(--font-code, 'DM Mono'), ui-monospace, monospace;
+}
+
+/* ── Nav ── */
+.howNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--_sp5) 0;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
+.howNavBrand { text-decoration: none; }
+.howNavLinks {
+  display: flex;
+  gap: var(--_sp5);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+.howNavLinks a {
+  color: var(--text-muted);
+  text-decoration: none;
+  padding-bottom: 2px;
+  transition: color var(--_dFast);
+}
+.howNavLinks a:hover { color: var(--text); }
+.isCurrent { color: var(--gold) !important; border-bottom: 1px solid var(--gold); }
+
+/* ── Hero ── */
+.howHero {
+  padding: var(--_sp9) 0 var(--_sp8);
+  border-bottom: 1px solid var(--border);
+  max-width: 760px;
+}
+.howEyebrow {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: var(--_sp4);
+}
+.howHeroTitle {
+  font-family: var(--font-title);
+  font-size: 104px;
+  line-height: 0.86;
+  letter-spacing: 0.03em;
+  color: var(--gold);
+  font-weight: 400;
+}
+.howHeroSub {
+  font-size: 19px;
+  line-height: 1.7;
+  color: var(--_dim);
+  margin-top: var(--_sp5);
+  max-width: 620px;
+}
+.howHeroMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--_sp3);
+  margin-top: var(--_sp6);
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.howHeroMeta span { white-space: nowrap; }
+
+/* ── Section scaffold ── */
+.howSection {
+  padding: var(--_sp9) 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+.howSection.isIn { opacity: 1; transform: none; }
+.howSectionHead {
+  display: flex;
+  gap: var(--_sp4);
+  align-items: baseline;
+  margin-bottom: var(--_sp7);
+}
+.howSectionNum { font-size: 13px; color: var(--gold); letter-spacing: 0.1em; padding-top: 4px; }
+.howSectionHeading .howEyebrow { margin-bottom: var(--_sp2); }
+.howSectionTitle {
+  font-family: var(--font-title);
+  font-size: 52px;
+  line-height: 0.92;
+  letter-spacing: 0.04em;
+  font-weight: 400;
+}
+.howSectionGrid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: var(--_sp8);
+  align-items: start;
+}
+.howSectionGridWide { grid-template-columns: 1fr; gap: var(--_sp7); }
+.howSectionGridWide .howSectionProse { max-width: 760px; }
+.howLead { font-size: 21px; line-height: 1.55; color: var(--text); margin: 0 0 var(--_sp5); text-wrap: pretty; }
+.howP { font-size: 16px; line-height: 1.7; color: var(--_dim); margin: 0 0 var(--_sp4); text-wrap: pretty; }
+.howHint {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-top: var(--_sp5);
+  padding-left: var(--_sp4);
+  border-left: 2px solid var(--gold);
+}
+
+/* ── Diagrams (S1, S5) ── */
+.howDiagram {
+  position: relative;
+  width: 100%;
+  background: var(--_deep);
+  border: 1px solid var(--border);
+  border-radius: var(--_rMd);
+  background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.howDiagramSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.howEdge {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 1.4;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 900ms var(--ease-out), stroke 400ms;
+}
+.howDiagram.isDraw .howEdge {
+  stroke-dashoffset: 0;
+  stroke: color-mix(in srgb, var(--gold) 55%, var(--border-strong));
+}
+.howNode {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--_rMd);
+  color: var(--text);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.45);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity var(--dur-mid) var(--ease-out) 200ms, transform var(--dur-mid) var(--ease-out) 200ms,
+              border-color var(--_dFast), box-shadow var(--_dFast);
+}
+.howDiagram.isDraw .howNode { opacity: 1; transform: none; }
+.howNode:hover, .howNode:focus-visible {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold), 0 0 22px var(--gold-glow);
+  outline: none;
+  z-index: 6;
+}
+.howNodeIcon { color: var(--_dim); flex: none; display: inline-flex; }
+.howNode:hover .howNodeIcon { color: var(--gold); }
+.howNodeLabel { font-size: 13px; font-weight: 600; letter-spacing: 0.01em; line-height: 1.15; }
+.howNodeStack { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.howNodeSub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 0.04em; }
+.howNodeSoft { background: var(--surface-2); border-style: dashed; }
+.howNodePipe .howNodeLabel { font-size: 12px; }
+.howNodeTip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%) translateY(4px);
+  width: max-content;
+  max-width: 230px;
+  padding: 9px 12px;
+  z-index: 20;
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--_rMd);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--_dim);
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--_dFast), transform var(--_dFast);
+}
+.howNode:hover .howNodeTip, .howNode:focus-visible .howNodeTip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── S2 Stepper ── */
+.howStepper { list-style: none; margin: 0; padding: 0; max-width: 720px; }
+.howStep {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: var(--_sp4);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+.howStep.isIn { opacity: 1; transform: none; }
+.howStepRail { display: flex; flex-direction: column; align-items: center; }
+.howStepDot {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--_dim);
+  transition: all var(--dur-mid) var(--ease-out);
+}
+.howStepRail::after {
+  content: '';
+  flex: 1;
+  width: 1px;
+  background: var(--border);
+  margin: 6px 0;
+}
+.howStep:last-child .howStepRail::after { display: none; }
+.howStep.isIn .howStepDot { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 16px var(--gold-glow); }
+.howStepMiss.isIn .howStepDot {
+  border-color: var(--blue-hero-bright);
+  color: var(--blue-hero-bright);
+  box-shadow: 0 0 16px rgba(61,122,209,0.4);
+}
+.howStepCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--_rMd);
+  padding: var(--_sp5);
+  margin-bottom: var(--_sp4);
+}
+.howStep.isEmph .howStepCard {
+  border-color: color-mix(in srgb, var(--gold) 45%, var(--border));
+  background: linear-gradient(0deg, var(--gold-soft), var(--gold-soft)), var(--surface);
+}
+.howStepHead {
+  display: flex;
+  align-items: center;
+  gap: var(--_sp3);
+  flex-wrap: wrap;
+  margin-bottom: var(--_sp3);
+}
+.howStepN { font-size: 10px; letter-spacing: 0.16em; color: var(--text-muted); }
+.howStepTitle { font-family: var(--font-title); font-size: 26px; letter-spacing: 0.03em; font-weight: 400; }
+.howStepBody { font-size: 15px; line-height: 1.65; color: var(--_dim); margin: 0; }
+.howCodeLine {
+  display: block;
+  margin-top: var(--_sp3);
+  padding: 9px 12px;
+  background: var(--_deep);
+  border: 1px solid var(--border);
+  border-radius: var(--_rSm);
+  font-size: 12.5px;
+  color: var(--gold);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.howTag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+.howTagGold { background: var(--gold-soft); color: var(--gold); }
+.howTagMiss { background: rgba(61,122,209,0.16); color: var(--blue-hero-bright); }
+.howBranch { margin-top: var(--_sp4); display: flex; flex-direction: column; gap: var(--_sp2); }
+.howBranchRow {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: var(--_sp3);
+  align-items: center;
+  padding: 9px 12px;
+  border-radius: var(--_rSm);
+  border: 1px solid var(--border);
+}
+.howBranchRowHit { background: var(--gold-soft); border-color: color-mix(in srgb, var(--gold) 35%, transparent); }
+.howBranchRowMiss { background: rgba(61,122,209,0.1); border-color: rgba(61,122,209,0.3); }
+.howBranchKey { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; }
+.howBranchRowHit .howBranchKey { color: var(--gold); }
+.howBranchRowMiss .howBranchKey { color: var(--blue-hero-bright); }
+.howBranchTxt { font-size: 13px; color: var(--_dim); }
+.howBranchMs { font-size: 12px; color: var(--text-muted); }
+
+/* ── S3 Cache bars ── */
+.howCacheBarsWrap { display: flex; flex-direction: column; gap: var(--_sp6); }
+.howCacheBarsGroup { display: flex; flex-direction: column; gap: var(--_sp5); }
+.howCachebarTop { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+.howCachebarLabel { font-family: var(--font-title); font-size: 22px; letter-spacing: 0.04em; }
+.howCachebarLabelHit { color: var(--gold); }
+.howCachebarLabelMiss { color: var(--blue-hero-bright); }
+.howCachebarMs { font-size: 13px; color: var(--_dim); }
+.howCachebarTrack {
+  height: 14px;
+  background: var(--_deep);
+  border: 1px solid var(--border);
+  border-radius: var(--_rSm);
+  overflow: hidden;
+}
+.howCachebarFill { height: 100%; width: 0; transition: width 1100ms var(--ease-out); }
+.howCachebarFillHit { background: linear-gradient(90deg, color-mix(in srgb, var(--gold) 70%, #000), var(--gold)); }
+.howCachebarFillMiss { background: linear-gradient(90deg, var(--blue-hero), var(--blue-hero-bright)); }
+.howCachebarNote { display: block; font-size: 11px; color: var(--text-muted); margin-top: 6px; letter-spacing: 0.04em; }
+.howCounter {
+  display: flex;
+  align-items: center;
+  gap: var(--_sp5);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--_rMd);
+  padding: var(--_sp5);
+  position: relative;
+}
+.howCounterCell { display: flex; flex-direction: column; }
+.howCounterNum { font-family: var(--font-title); font-size: 48px; line-height: 0.9; color: var(--text); }
+.howCounterCap { font-size: 10px; letter-spacing: 0.16em; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
+.howCounterDiv { width: 1px; align-self: stretch; background: var(--border); }
+.howCounterSrc { position: absolute; top: 12px; right: 14px; font-size: 10px; color: var(--gold); letter-spacing: 0.06em; }
+
+/* ── S4 Prompt Inspector ── */
+.howPrompt {
+  background: var(--_deep);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--_rMd);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.howPromptBar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 14px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.howPromptDot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+}
+.howPromptFile { margin-left: 8px; font-size: 11px; color: var(--text-muted); letter-spacing: 0.04em; }
+.howPromptBody {
+  margin: 0;
+  padding: var(--_sp5);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--_dim);
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+.howPromptLabel { display: block; font-size: 10px; letter-spacing: 0.18em; color: var(--gold); margin: 2px 0 6px; }
+.howPromptRule { display: block; height: 1px; background: var(--border); margin: 8px 0; }
+.howPromptPlain { color: var(--_dim); }
+.howHl {
+  position: relative;
+  display: inline-block;
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin: 1px 0;
+  cursor: help;
+  transition: opacity var(--dur-mid) var(--ease-out), filter var(--_dFast);
+  opacity: 0;
+}
+.howPrompt.isIn .howHl { opacity: 1; }
+.howHlGold  { background: rgba(240,180,41,0.16); color: #f6cf6e; box-shadow: inset 0 0 0 1px rgba(240,180,41,0.35); }
+.howHlBlue  { background: rgba(61,122,209,0.14); color: #9cc0f5; box-shadow: inset 0 0 0 1px rgba(61,122,209,0.3); }
+.howHlMuted { background: rgba(255,255,255,0.04); color: var(--_dim); box-shadow: inset 0 0 0 1px var(--border); }
+.howHlGreen { background: rgba(39,192,138,0.14); color: #7fe0bc; box-shadow: inset 0 0 0 1px rgba(39,192,138,0.32); }
+.howHl:hover, .howHl:focus-visible { filter: brightness(1.15); outline: none; z-index: 8; }
+.howHlTip {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 8px);
+  width: max-content;
+  max-width: 320px;
+  padding: 10px 13px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--_rMd);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--_dim);
+  white-space: normal;
+  box-shadow: var(--shadow-card);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity var(--_dFast), transform var(--_dFast);
+  z-index: 30;
+}
+.howHl:hover .howHlTip, .howHl:focus-visible .howHlTip { opacity: 1; transform: translateY(0); }
+
+/* ── S6 Stack + RAM ── */
+.howStackwrap { display: flex; flex-direction: column; gap: var(--_sp6); }
+.howStackgrid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--_sp4); }
+.howStackcard {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--_rMd);
+  padding: var(--_sp5);
+  overflow: hidden;
+  cursor: help;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out),
+              border-color var(--_dFast);
+}
+.howStackcard.isIn { opacity: 1; transform: none; }
+.howStackcard:hover, .howStackcard:focus-visible { border-color: var(--gold); outline: none; }
+.howStackcardHead { display: flex; align-items: center; justify-content: space-between; }
+.howStackcardName { font-family: var(--font-title); font-size: 30px; letter-spacing: 0.03em; font-weight: 400; }
+.howStackcardPlus {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.howStackcard:hover .howStackcardPlus { border-color: var(--gold); color: var(--gold); }
+.howStackcardSub { font-size: 11px; color: var(--text-muted); letter-spacing: 0.04em; margin: 6px 0 0; }
+.howStackcardWhy {
+  display: block;
+  margin-top: var(--_sp4);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--_dim);
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height var(--dur-mid) var(--ease-out), opacity var(--dur-mid) var(--ease-out);
+}
+.howStackcard:hover .howStackcardWhy, .howStackcard:focus-visible .howStackcardWhy {
+  max-height: 160px;
+  opacity: 1;
+}
+.howRam {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--_rMd);
+  padding: var(--_sp5);
+}
+.howRamHead { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--_sp4); }
+.howRamTitle { font-size: 11px; letter-spacing: 0.14em; color: var(--_dim); }
+.howRamUsed { font-size: 11px; color: var(--gold); letter-spacing: 0.06em; }
+.howRamBar { display: flex; height: 34px; border-radius: var(--_rSm); overflow: hidden; border: 1px solid var(--border); }
+.howRamSeg {
+  height: 100%;
+  width: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  overflow: hidden;
+  transition: width 800ms var(--ease-out);
+  border-right: 1px solid rgba(0,0,0,0.3);
+}
+.howRamSeg:last-child { border-right: none; }
+.howRamSeg.isMuted { color: var(--text-muted); }
+.howRamSeglabel { font-size: 10px; letter-spacing: 0.06em; color: rgba(0,0,0,0.7); font-weight: 500; white-space: nowrap; }
+.howRamSeg.isMuted .howRamSeglabel { color: var(--text-muted); }
+.howRamLegend { display: flex; flex-wrap: wrap; gap: var(--_sp3) var(--_sp4); margin-top: var(--_sp4); }
+.howRamKey { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-muted); letter-spacing: 0.04em; }
+.howRamSwatch { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+
+/* ── Footer ── */
+.howFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--_sp7) 0 var(--_sp9);
+  color: var(--text-muted);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.howFooterBack { color: var(--gold); text-decoration: none; }
+.howFooterBack:hover { text-decoration: underline; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .howSectionGrid { grid-template-columns: 1fr; gap: var(--_sp6); }
+  .howHeroTitle { font-size: 72px; }
+  .howSectionTitle { font-size: 40px; }
+}
+@media (max-width: 560px) {
+  .howHeroTitle { font-size: 56px; }
+  .howStackgrid { grid-template-columns: 1fr; }
+  .howCounter { flex-wrap: wrap; gap: var(--_sp4); }
+  .howCounterDiv { display: none; }
+  .howNodeLabel { font-size: 11px; }
+  .howNode { padding: 0 8px; gap: 5px; }
+  .howRamSeglabel { font-size: 8px; }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .howSection, .howStep, .howStackcard { opacity: 1 !important; transform: none !important; }
+  .howEdge { stroke-dashoffset: 0 !important; transition: none !important; }
+  .howNode { opacity: 1 !important; transform: none !important; }
+  .howCachebarFill { width: var(--_target-w, 100%) !important; transition: none !important; }
+  .howRamSeg { width: var(--_target-w, 100%) !important; transition: none !important; }
+  .howHl { opacity: 1 !important; }
+}
