@@ -26,7 +26,7 @@ export function PortraitStrip({ team, characters }: PortraitStripProps) {
 
   return (
     <div>
-      <div style={{ marginBottom: '12px' }}>
+      <div style={{ marginBottom: '12px', textAlign: team === 'B' ? 'right' : 'left' }}>
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: accent, letterSpacing: '0.12em', marginBottom: '2px' }}>
           {SIDE_LABEL[team]}
         </p>
@@ -34,7 +34,7 @@ export function PortraitStrip({ team, characters }: PortraitStripProps) {
           {TEAM_LABEL[team]}
         </p>
       </div>
-      <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: team === 'B' ? 'flex-end' : 'flex-start' }}>
         {characters.map((char, i) => (
           <div
             key={char.id}
@@ -45,7 +45,7 @@ export function PortraitStrip({ team, characters }: PortraitStripProps) {
               overflow: 'hidden',
               border: `2px solid ${accent}`,
               marginLeft: i > 0 ? '-16px' : '0',
-              zIndex: characters.length - i,
+              zIndex: team === 'B' ? i + 1 : characters.length - i,
               position: 'relative',
               flexShrink: 0,
             }}
