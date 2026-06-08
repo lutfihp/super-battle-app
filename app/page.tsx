@@ -157,7 +157,7 @@ export default function HomePage() {
               How it works
             </Link>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text-muted)', letterSpacing: '0.12em' }}>
-              PICK YOUR DC CHAMPIONS. LET THEM FIGHT.
+              MARVEL VS DC. LET THEM FIGHT.
             </p>
           </div>
         </header>
