@@ -59,13 +59,13 @@ app/
     page.tsx              # Engineering deep-dive page — JetBrains Mono font, 6 animated sections
 components/
   AlignBadge.tsx          # Alignment pill (HERO / VILLAIN / NEUTRAL)
-  CharacterCard.tsx       # Roster card — Framer hover, team buttons (client)
+  CharacterCard.tsx       # Roster card — Framer hover, team buttons (client); accepts teamAFull/teamBFull booleans — dims button + sets cursor:not-allowed when that team is full
   LightningVS.tsx         # Gold VS with bolt clip-path
   Portrait.tsx            # Radial bg + stripe + SVG bust + scrim
   StatBar.tsx             # exports StatBar + StatGrid
   TeamColumn.tsx          # Team roster display (card-cut, empty state)
   battle/
-    BattleClient.tsx      # Phase machine: loading → telling → done (client)
+    BattleClient.tsx      # Phase machine: loading → telling → done (client); center column shows LightningVS during telling, ScoreCompare only at done
     PortraitStrip.tsx     # Overlapping 84×112 portraits
     ScoreCompare.tsx      # Animated split bar with gold pivot (client)
     StorySentence.tsx     # Slide-in story line with reduced-motion support (client)
@@ -127,8 +127,8 @@ Reduced motion: `@media (prefers-reduced-motion: reduce)` in the CSS module sets
 loading  →  API call + 1100ms minimum  →  telling  →  1200ms per sentence × 8  →  done
 ```
 - `loading`: gold sweep bar animation
-- `telling`: StorySentence components reveal one by one via setInterval
-- `done`: WinnerBanner mounts with scale + shimmer animation
+- `telling`: StorySentence components reveal one by one via setInterval; center column shows `LightningVS` (scores hidden)
+- `done`: WinnerBanner mounts with scale + shimmer animation; center column shows `ScoreCompare` with final multiplied scores
 
 ## Environment
 
@@ -146,11 +146,14 @@ Copy `.env.local.example` to `.env.local`. The API base URL falls back to `http:
 - [ ] Skeleton cards → 4 character cards load
 - [ ] Search filters by character name (client-side)
 - [ ] `+ TEAM A` assigns; clicking again removes (toggle); clicking `+ TEAM A` on a B character swaps it
+- [ ] Teams capped at 3 — adding a 4th to a full team does nothing; the button dims to 40% opacity with `cursor:not-allowed`
 - [ ] `×` in TeamColumn removes character
 - [ ] INITIATE BATTLE disabled when either team empty; gold when ready
 
 ### Battle page
 - [ ] Battle page: sweep bar ~1.1s → overview grid → story reveals 1 per 1.2s → sentence 7 (index 6) has gold bg → WinnerBanner appears
+- [ ] During storytelling, center column shows gold VS bolt only — no scores visible
+- [ ] Scores appear only inside WinnerBanner (bottom line: `scoreA — scoreB`)
 - [ ] FIGHT AGAIN → back to landing
 - [ ] Navigate to `/battle` with no params → immediate redirect to `/`
 - [ ] Responsive: builder stacks vertically at ≤760px, roster goes to 2 cols
