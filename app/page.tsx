@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Character } from '@/lib/types'
-import { getPopularCharacters, runBattle } from '@/lib/api'
+import { getPopularCharacters, searchCharacters, runBattle } from '@/lib/api'
 import { CharacterCard } from '@/components/CharacterCard'
 import { TeamColumn } from '@/components/TeamColumn'
 import { LightningVS } from '@/components/LightningVS'
@@ -33,6 +33,8 @@ export default function HomePage() {
   const [isBattling, setIsBattling] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loadError, setLoadError] = useState(false)
+  const [searchResults, setSearchResults] = useState<Character[] | null>(null)
+  const [isSearching, setIsSearching] = useState(false)
 
   useEffect(() => {
     getPopularCharacters()
@@ -40,9 +42,23 @@ export default function HomePage() {
       .catch(() => { setLoadError(true); setIsLoading(false) })
   }, [])
 
-  const displayed = search.trim()
-    ? popular.filter((c) => c.name.toLowerCase().includes(search.trim().toLowerCase()))
-    : popular
+  useEffect(() => {
+    const q = search.trim()
+    if (!q) {
+      setSearchResults(null)
+      setIsSearching(false)
+      return
+    }
+    setIsSearching(true)
+    const id = setTimeout(() => {
+      searchCharacters(q)
+        .then((results) => { setSearchResults(results); setIsSearching(false) })
+        .catch(() => { setSearchResults([]); setIsSearching(false) })
+    }, 300)
+    return () => clearTimeout(id)
+  }, [search])
+
+  const displayed = searchResults ?? popular
 
   function getTeam(id: string): 'A' | 'B' | null {
     if (teamA.includes(id)) return 'A'
@@ -179,7 +195,7 @@ export default function HomePage() {
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--red)' }}>
               Could not load characters. Please refresh.
             </p>
-          ) : isLoading ? (
+          ) : isLoading || isSearching ? (
             <div className="roster-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
               {[0, 1, 2, 3].map((i) => <SkeletonCard key={i} />)}
             </div>
