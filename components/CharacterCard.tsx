@@ -52,7 +52,7 @@ export function CharacterCard({ char, team, teamAFull, teamBFull, onPickA, onPic
     >
       {/* Portrait with overlays */}
       <div style={{ position: 'relative' }}>
-        <Portrait char={char} ratio="3/4" />
+        <Portrait char={char} ratio="3/4" sizes="(max-width:440px) 50vw, 25vw" />
         <div style={{ position: 'absolute', top: '8px', left: '8px' }}>
           <AlignBadge alignment={char.alignment} />
         </div>

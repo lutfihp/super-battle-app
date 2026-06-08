@@ -83,7 +83,7 @@ export function TeamColumn({ team, characters, onRemove }: TeamColumnProps) {
               }}
             >
               <div style={{ width: '44px', height: '44px', flexShrink: 0, borderRadius: '3px', overflow: 'hidden' }}>
-                <Portrait char={char} ratio="1/1" />
+                <Portrait char={char} ratio="1/1" sizes="44px" />
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontFamily: 'var(--font-title)', fontSize: '18px', lineHeight: 1, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>

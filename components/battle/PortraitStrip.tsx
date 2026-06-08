@@ -50,7 +50,7 @@ export function PortraitStrip({ team, characters }: PortraitStripProps) {
               flexShrink: 0,
             }}
           >
-            <Portrait char={char} ratio="3/4" />
+            <Portrait char={char} ratio="3/4" sizes="84px" />
           </div>
         ))}
       </div>
