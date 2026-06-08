@@ -54,6 +54,7 @@ export default function HomePage() {
     if (teamA.includes(id)) {
       setTeamA((p) => p.filter((x) => x !== id))
     } else {
+      if (teamA.length >= 3) return
       setTeamB((p) => p.filter((x) => x !== id))
       setTeamA((p) => [...p, id])
     }
@@ -63,6 +64,7 @@ export default function HomePage() {
     if (teamB.includes(id)) {
       setTeamB((p) => p.filter((x) => x !== id))
     } else {
+      if (teamB.length >= 3) return
       setTeamA((p) => p.filter((x) => x !== id))
       setTeamB((p) => [...p, id])
     }
@@ -188,6 +190,8 @@ export default function HomePage() {
                   key={char.id}
                   char={char}
                   team={getTeam(char.id)}
+                  teamAFull={teamA.length >= 3}
+                  teamBFull={teamB.length >= 3}
                   onPickA={() => handlePickA(char.id)}
                   onPickB={() => handlePickB(char.id)}
                 />

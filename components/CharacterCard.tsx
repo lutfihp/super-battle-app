@@ -9,6 +9,8 @@ import { StatGrid } from './StatBar'
 interface CharacterCardProps {
   char: Character
   team: 'A' | 'B' | null
+  teamAFull: boolean
+  teamBFull: boolean
   onPickA: () => void
   onPickB: () => void
 }
@@ -30,7 +32,7 @@ const TEAM_ACCENT: Record<'A' | 'B', string> = {
   B: 'var(--red-villain-bright)',
 }
 
-export function CharacterCard({ char, team, onPickA, onPickB }: CharacterCardProps) {
+export function CharacterCard({ char, team, teamAFull, teamBFull, onPickA, onPickB }: CharacterCardProps) {
   const accent = team ? TEAM_ACCENT[team] : 'var(--text-muted)'
   const borderColor = team ? TEAM_ACCENT[team] : 'var(--border)'
 
@@ -103,8 +105,9 @@ export function CharacterCard({ char, team, onPickA, onPickB }: CharacterCardPro
               fontSize: '10px',
               letterSpacing: '0.08em',
               padding: '6px 0',
-              cursor: 'pointer',
+              cursor: teamAFull && team !== 'A' ? 'not-allowed' : 'pointer',
               borderRadius: '3px',
+              opacity: teamAFull && team !== 'A' ? 0.4 : 1,
             }}
           >
             + TEAM A
@@ -119,8 +122,9 @@ export function CharacterCard({ char, team, onPickA, onPickB }: CharacterCardPro
               fontSize: '10px',
               letterSpacing: '0.08em',
               padding: '6px 0',
-              cursor: 'pointer',
+              cursor: teamBFull && team !== 'B' ? 'not-allowed' : 'pointer',
               borderRadius: '3px',
+              opacity: teamBFull && team !== 'B' ? 0.4 : 1,
             }}
           >
             + TEAM B
