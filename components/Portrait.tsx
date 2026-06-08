@@ -1,8 +1,13 @@
+'use client'
+
+import Image from 'next/image'
+import { useState } from 'react'
 import { Character } from '@/lib/types'
 
 interface PortraitProps {
   char: Character
   ratio?: string
+  sizes?: string
 }
 
 function AnonymousBust() {
@@ -20,7 +25,9 @@ function AnonymousBust() {
   )
 }
 
-export function Portrait({ char, ratio = '3/4' }: PortraitProps) {
+export function Portrait({ char, ratio = '3/4', sizes = '200px' }: PortraitProps) {
+  const [imgError, setImgError] = useState(false)
+  const showImage = Boolean(char.image_url) && !imgError
   const bgColor = char.alignment === 'good' ? 'var(--blue-hero)' : 'var(--red-villain)'
 
   return (
@@ -34,15 +41,28 @@ export function Portrait({ char, ratio = '3/4' }: PortraitProps) {
       role="img"
       aria-label={char.name}
     >
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage:
-            'repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 8px)',
-        }}
-      />
-      <AnonymousBust />
+      {showImage ? (
+        <Image
+          src={char.image_url}
+          alt={char.name}
+          fill
+          sizes={sizes}
+          style={{ objectFit: 'cover' }}
+          onError={() => setImgError(true)}
+        />
+      ) : (
+        <>
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage:
+                'repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 8px)',
+            }}
+          />
+          <AnonymousBust />
+        </>
+      )}
       <div
         style={{
           position: 'absolute',
