@@ -17,14 +17,6 @@ const LABEL: Record<'A' | 'B', string> = {
   B: 'TEAM BETA',
 }
 
-function charPower(char: Character): number {
-  return char.intelligence + char.strength + char.speed + char.durability + char.power + char.combat
-}
-
-function teamPower(chars: Character[]): number {
-  return chars.reduce((sum, c) => sum + charPower(c), 0)
-}
-
 export function TeamColumn({ team, characters, onRemove }: TeamColumnProps) {
   const accent = ACCENT[team]
 
@@ -41,16 +33,8 @@ export function TeamColumn({ team, characters, onRemove }: TeamColumnProps) {
       }}
     >
       <div style={{ padding: '16px 16px 12px' }}>
-        <div style={{ fontFamily: 'var(--font-title)', fontSize: '38px', color: accent, lineHeight: 1, marginBottom: '2px' }}>
+        <div style={{ fontFamily: 'var(--font-title)', fontSize: '38px', color: accent, lineHeight: 1 }}>
           {LABEL[team]}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-          <span style={{ fontFamily: 'var(--font-title)', fontSize: '40px', color: 'var(--text)', lineHeight: 1 }}>
-            {teamPower(characters).toLocaleString()}
-          </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-muted)', letterSpacing: '0.1em' }}>
-            POWER
-          </span>
         </div>
       </div>
 
@@ -88,9 +72,6 @@ export function TeamColumn({ team, characters, onRemove }: TeamColumnProps) {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontFamily: 'var(--font-title)', fontSize: '18px', lineHeight: 1, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {char.name}
-                </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--text-muted)' }}>
-                  {charPower(char).toLocaleString()}
                 </div>
               </div>
               <button
