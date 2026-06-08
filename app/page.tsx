@@ -116,6 +116,7 @@ export default function HomePage() {
         @media (max-width: 760px) {
           .builder-grid { grid-template-columns: 1fr !important; }
           .roster-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .roster-item:nth-child(n+9) { display: none; }
         }
         @media (max-width: 440px) {
           .roster-grid { grid-template-columns: 1fr !important; }
@@ -202,15 +203,16 @@ export default function HomePage() {
           ) : (
             <div className="roster-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
               {displayed.map((char) => (
-                <CharacterCard
-                  key={char.id}
-                  char={char}
-                  team={getTeam(char.id)}
-                  teamAFull={teamA.length >= 3}
-                  teamBFull={teamB.length >= 3}
-                  onPickA={() => handlePickA(char.id)}
-                  onPickB={() => handlePickB(char.id)}
-                />
+                <div key={char.id} className="roster-item">
+                  <CharacterCard
+                    char={char}
+                    team={getTeam(char.id)}
+                    teamAFull={teamA.length >= 3}
+                    teamBFull={teamB.length >= 3}
+                    onPickA={() => handlePickA(char.id)}
+                    onPickB={() => handlePickB(char.id)}
+                  />
+                </div>
               ))}
             </div>
           )}
