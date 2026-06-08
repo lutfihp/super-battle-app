@@ -8,6 +8,7 @@ import { PortraitStrip } from './PortraitStrip'
 import { ScoreCompare } from './ScoreCompare'
 import { StorySentence } from './StorySentence'
 import { WinnerBanner } from './WinnerBanner'
+import { LightningVS } from '@/components/LightningVS'
 
 type Phase = 'loading' | 'telling' | 'done'
 
@@ -95,7 +96,11 @@ export function BattleClient({ teamAIds, teamBIds }: BattleClientProps) {
               style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '24px', alignItems: 'center', marginBottom: '48px' }}
             >
               <PortraitStrip team="A" characters={result.team_a} />
-              <ScoreCompare scoreA={result.score_a} scoreB={result.score_b} />
+              {phase === 'telling' ? (
+                <LightningVS />
+              ) : (
+                <ScoreCompare scoreA={result.score_a} scoreB={result.score_b} />
+              )}
               <PortraitStrip team="B" characters={result.team_b} />
             </div>
 
