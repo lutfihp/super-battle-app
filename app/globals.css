@@ -107,3 +107,27 @@ body {
 @media (max-width: 760px) {
   .sb-footer__top { flex-direction: column; align-items: center; }
 }
+
+/* ── Stat label tooltip ── */
+[data-stat-full] {
+  position: relative;
+  cursor: default;
+}
+[data-stat-full]:hover::after {
+  content: attr(data-stat-full);
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  padding: 3px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10;
+}
