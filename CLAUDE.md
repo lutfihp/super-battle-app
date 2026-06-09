@@ -4,9 +4,9 @@
 
 Next.js 16 frontend for SuperBattle — DC character battle story generator. Fully implemented. Connects to the FastAPI backend at `super-battle-api/`.
 
-## Status: Complete — ready to deploy
+## Status: Complete — pushed to origin (2026-06-09)
 
-All pages and components are built, TypeScript clean, production build passes. Footer updated with credit links. GitHub Actions + Docker Compose deploy config in place. Follow `DEPLOY.md` (parent folder) for VPS setup.
+All pages and components are built, TypeScript clean, production build passes. Pushed to `main` — GitHub Actions will deploy on push. Follow `DEPLOY.md` (parent folder) for VPS one-time setup if not done yet.
 
 ## Run locally
 
@@ -51,19 +51,19 @@ Tailwind v4 uses `@tailwindcss/postcss` in `postcss.config.mjs` — **not** the 
 ```
 app/
   layout.tsx              # Fonts, html vars, body base class
-  globals.css             # @import tailwindcss + CSS vars + @theme + .card-cut + .sb-footer* classes
-  page.tsx                # Landing page (client) — flex header: logo left, how-it-works link + tagline right; GithubIcon component; full footer (legal + credit + repo buttons)
+  globals.css             # @import tailwindcss + CSS vars + @theme + .card-cut + .sb-footer* classes + [data-stat-full] tooltip rule
+  page.tsx                # Landing page (client) — flex header: logo left, how-it-works link + tagline right (.header-tagline hidden at ≤440px); searchRef wired to search input; onAddChampion passed to both TeamColumns; GithubIcon component; full footer
   battle/
     page.tsx              # Server wrapper — awaits searchParams, renders BattleClient
   how-it-works/
     page.tsx              # Engineering deep-dive page — JetBrains Mono font, 6 animated sections
 components/
   AlignBadge.tsx          # Alignment pill (HERO / VILLAIN / NEUTRAL)
-  CharacterCard.tsx       # Roster card — Framer hover, team buttons (client); accepts teamAFull/teamBFull booleans — dims button + sets cursor:not-allowed when that team is full
+  CharacterCard.tsx       # Roster card — Framer hover, team buttons (client); accepts teamAFull/teamBFull booleans — dims button + sets cursor:not-allowed when that team is full; no archetype tag (removed 2026-06-09)
   LightningVS.tsx         # Gold VS with bolt clip-path
   Portrait.tsx            # Radial bg + stripe + SVG bust + scrim
-  StatBar.tsx             # exports StatBar + StatGrid
-  TeamColumn.tsx          # Team roster display (card-cut, empty state)
+  StatBar.tsx             # exports StatBar + StatGrid; STATS array includes `full` field (e.g. 'Power'); label span has data-stat-full attr — CSS tooltip in globals.css shows full name on hover
+  TeamColumn.tsx          # Team roster display (card-cut, empty state); accepts onAddChampion?: () => void — empty state is a button that calls it
   battle/
     BattleClient.tsx      # Phase machine: loading → telling → done (client); center column shows LightningVS during telling, ScoreCompare only at done
     PortraitStrip.tsx     # Overlapping 84×112 portraits
@@ -170,6 +170,14 @@ Copy `.env.local.example` to `.env.local`. The API base URL falls back to `http:
 - [ ] S6: stack cards stagger in; hovering card reveals "why" text; RAM gauge segments animate in with stagger
 - [ ] Footer: "← back to the battle" link works
 
+## Favicon & manifest
+
+Added 2026-06-09. Gold lightning bolt brand mark via Next.js App Router convention:
+- `app/icon.svg` — auto-emits `<link rel="icon">`
+- `app/apple-icon.png` — auto-emits `<link rel="apple-touch-icon">`
+- `public/favicon-32.png`, `public/icon-192.png`, `public/icon-512.png` — referenced by manifest
+- `public/site.webmanifest` — `theme_color`/`background_color` = `#0a0c10`; linked via `manifest: '/site.webmanifest'` in `layout.tsx` metadata
+
 ## Footer
 
 Added 2026-06-09. Bottom of `app/page.tsx`:
@@ -182,7 +190,6 @@ CSS classes live in `app/globals.css` under `/* ── Footer ── */`. `Githu
 
 ## Next steps
 
-1. Push `super-battle-app` to origin (`git push origin main`) — triggers first GitHub Actions deploy
-2. Follow `DEPLOY.md` for VPS one-time setup (DNS → dirs → .env → nginx → SSL → GitHub Secrets)
-3. Visual QA with backend running after first deploy
-4. Replace stub Portrait with real character images using `next/image` once art is available
+1. Follow `DEPLOY.md` for VPS one-time setup (DNS → dirs → .env → nginx → SSL → GitHub Secrets) if not yet done
+2. Visual QA with backend running after first deploy
+3. Replace stub Portrait with real character images using `next/image` once art is available
