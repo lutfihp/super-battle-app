@@ -19,13 +19,6 @@ function powerTotal(char: Character): number {
   return char.intelligence + char.strength + char.speed + char.durability + char.power + char.combat
 }
 
-function archetypeTag(char: Character): string {
-  if (char.powers_text) {
-    const first = char.powers_text.trim().split(/[\s,]+/)[0]
-    if (first) return first.toUpperCase()
-  }
-  return char.alignment.toUpperCase()
-}
 
 const TEAM_ACCENT: Record<'A' | 'B', string> = {
   A: 'var(--blue-hero-bright)',
@@ -86,10 +79,6 @@ export function CharacterCard({ char, team, teamAFull, teamBFull, onPickA, onPic
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--gold)' }}>
             {powerTotal(char).toLocaleString()} PWR
           </div>
-        </div>
-
-        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--text-muted)', letterSpacing: '0.08em' }}>
-          {archetypeTag(char)}
         </div>
 
         <StatGrid char={char} accent={accent} />
