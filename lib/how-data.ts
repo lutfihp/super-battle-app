@@ -109,7 +109,7 @@ export const PROMPT_SEGMENTS: PromptSegment[] = [
 export const PIPE_NODES: Record<string, PipeNode> = {
   src0: { x: 70,  y: 24,  w: 250, h: 64, label: 'SuperHero API CDN', sub: 'all.json · 731 chars', icon: 'ext' },
   src1: { x: 560, y: 24,  w: 250, h: 64, label: 'Comic Vine API', sub: 'search by name', icon: 'search' },
-  t0:   { x: 70,  y: 150, w: 250, h: 72, label: 'Filter publisher = "DC Comics" → ~200 characters', icon: 'search', soft: true },
+  t0:   { x: 70,  y: 150, w: 250, h: 72, label: 'Filter DC Comics + Marvel Comics → ~420 characters', icon: 'search', soft: true },
   t1:   { x: 560, y: 150, w: 250, h: 72, label: 'Named ability text (e.g. Flight, Heat Vision)', icon: 'ai', soft: true },
   supa: { x: 285, y: 296, w: 310, h: 64, label: 'Supabase characters table', sub: 'one-time seed at deploy', icon: 'db' },
   api:  { x: 285, y: 420, w: 310, h: 64, label: 'FastAPI /api/characters/*', sub: 'serves frontend — no external call', icon: 'py' },
@@ -142,4 +142,4 @@ export const RAM: RamSegment[] = [
   { label: 'Available', mb: 784, tone: 'rgba(255,255,255,0.06)', muted: true },
 ]
 
-export const STATS_FALLBACK = { battles_cached: 2847, characters_loaded: 203 }
+export const STATS_FALLBACK = { battles_cached: 2847, characters_loaded: 386 }
