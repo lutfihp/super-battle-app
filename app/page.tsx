@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Character } from '@/lib/types'
@@ -43,6 +43,7 @@ export default function HomePage() {
   const [loadError, setLoadError] = useState(false)
   const [searchResults, setSearchResults] = useState<Character[] | null>(null)
   const [isSearching, setIsSearching] = useState(false)
+  const searchRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     getPopularCharacters()
@@ -181,6 +182,7 @@ export default function HomePage() {
             SELECT YOUR CHAMPIONS
           </h2>
           <input
+            ref={searchRef}
             type="text"
             placeholder="Search characters..."
             value={search}
@@ -239,11 +241,21 @@ export default function HomePage() {
             className="builder-grid"
             style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '16px', alignItems: 'start' }}
           >
-            <TeamColumn team="A" characters={teamAChars} onRemove={handleRemove} />
+            <TeamColumn
+              team="A"
+              characters={teamAChars}
+              onRemove={handleRemove}
+              onAddChampion={() => searchRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+            />
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 8px' }}>
               <LightningVS />
             </div>
-            <TeamColumn team="B" characters={teamBChars} onRemove={handleRemove} />
+            <TeamColumn
+              team="B"
+              characters={teamBChars}
+              onRemove={handleRemove}
+              onAddChampion={() => searchRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+            />
           </div>
         </section>
 

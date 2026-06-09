@@ -5,6 +5,7 @@ interface TeamColumnProps {
   team: 'A' | 'B'
   characters: Character[]
   onRemove: (id: string) => void
+  onAddChampion?: () => void
 }
 
 const ACCENT: Record<'A' | 'B', string> = {
@@ -17,7 +18,7 @@ const LABEL: Record<'A' | 'B', string> = {
   B: 'TEAM BETA',
 }
 
-export function TeamColumn({ team, characters, onRemove }: TeamColumnProps) {
+export function TeamColumn({ team, characters, onRemove, onAddChampion }: TeamColumnProps) {
   const accent = ACCENT[team]
 
   return (
@@ -40,8 +41,10 @@ export function TeamColumn({ team, characters, onRemove }: TeamColumnProps) {
 
       <div style={{ flex: 1, padding: '0 16px 16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {characters.length === 0 ? (
-          <div
+          <button
+            onClick={onAddChampion}
             style={{
+              width: '100%',
               border: '1px dashed var(--border-strong)',
               borderRadius: '4px',
               padding: '24px 16px',
@@ -50,10 +53,12 @@ export function TeamColumn({ team, characters, onRemove }: TeamColumnProps) {
               fontSize: '11px',
               color: 'var(--text-muted)',
               letterSpacing: '0.1em',
+              background: 'none',
+              cursor: 'pointer',
             }}
           >
             ADD A CHAMPION
-          </div>
+          </button>
         ) : (
           characters.map((char) => (
             <div
