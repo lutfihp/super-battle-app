@@ -4,9 +4,9 @@
 
 Next.js 16 frontend for SuperBattle — DC character battle story generator. Fully implemented. Connects to the FastAPI backend at `super-battle-api/`.
 
-## Status: Complete — ready for visual QA and integration testing
+## Status: Complete — ready to deploy
 
-All pages and components are built, TypeScript clean, production build passes. Needs a human visual check with the backend running.
+All pages and components are built, TypeScript clean, production build passes. Footer updated with credit links. GitHub Actions + Docker Compose deploy config in place. Follow `DEPLOY.md` (parent folder) for VPS setup.
 
 ## Run locally
 
@@ -51,8 +51,8 @@ Tailwind v4 uses `@tailwindcss/postcss` in `postcss.config.mjs` — **not** the 
 ```
 app/
   layout.tsx              # Fonts, html vars, body base class
-  globals.css             # @import tailwindcss + CSS vars + @theme + .card-cut
-  page.tsx                # Landing page (client) — flex header: logo left, how-it-works link + tagline right
+  globals.css             # @import tailwindcss + CSS vars + @theme + .card-cut + .sb-footer* classes
+  page.tsx                # Landing page (client) — flex header: logo left, how-it-works link + tagline right; GithubIcon component; full footer (legal + credit + repo buttons)
   battle/
     page.tsx              # Server wrapper — awaits searchParams, renders BattleClient
   how-it-works/
@@ -170,9 +170,19 @@ Copy `.env.local.example` to `.env.local`. The API base URL falls back to `http:
 - [ ] S6: stack cards stagger in; hovering card reveals "why" text; RAM gauge segments animate in with stagger
 - [ ] Footer: "← back to the battle" link works
 
+## Footer
+
+Added 2026-06-09. Bottom of `app/page.tsx`:
+- Legal: "Data provided by SuperHero API & Comic Vine. Non-commercial portfolio project. Not affiliated with DC Comics or Marvel Comics."
+- Credit: "Designed & built by lutfihp" → links to `https://lutfihp.github.io`
+- Two GitHub buttons: Frontend (`https://github.com/lutfihp/super-battle-app`) and Backend (`https://github.com/lutfihp/super-battle-api`) with octocat SVG
+
+CSS classes live in `app/globals.css` under `/* ── Footer ── */`. `GithubIcon` is an inline function component at the top of `page.tsx`.
+
+
 ## Next steps
 
-- Wire real character data once Supabase is populated (backend integration phase)
-- Replace stub Portrait with real character images using `next/image` once art is available
-- Deploy via Docker to server (Dockerfile written, not tested locally)
-- Update `GET /api/stats` to return real Supabase COUNT queries (backend integration phase)
+1. Push `super-battle-app` to origin (`git push origin main`) — triggers first GitHub Actions deploy
+2. Follow `DEPLOY.md` for VPS one-time setup (DNS → dirs → .env → nginx → SSL → GitHub Secrets)
+3. Visual QA with backend running after first deploy
+4. Replace stub Portrait with real character images using `next/image` once art is available
