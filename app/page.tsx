@@ -128,6 +128,7 @@ export default function HomePage() {
         }
         @media (max-width: 440px) {
           .roster-grid { grid-template-columns: 1fr !important; }
+          .header-tagline { display: none; }
         }
       `}</style>
 
@@ -165,7 +166,7 @@ export default function HomePage() {
             >
               How it works
             </Link>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text-muted)', letterSpacing: '0.12em' }}>
+            <p className="header-tagline" style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--text-muted)', letterSpacing: '0.12em' }}>
               MARVEL VS DC. LET THEM FIGHT.
             </p>
           </div>
