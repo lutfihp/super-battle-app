@@ -20,8 +20,9 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'SuperBattle — DC Character Battle',
-  description: 'Pick your DC champions. Let them fight.',
+  title: 'SuperBattle — Hero vs Hero Battle',
+  description: 'Pick your champions. Let them fight.',
+  manifest: '/site.webmanifest',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
