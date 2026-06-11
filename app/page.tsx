@@ -43,13 +43,24 @@ export default function HomePage() {
   const [loadError, setLoadError] = useState(false)
   const [searchResults, setSearchResults] = useState<Character[] | null>(null)
   const [isSearching, setIsSearching] = useState(false)
+  const [charCache, setCharCache] = useState<Map<string, Character>>(new Map())
   const searchRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     getPopularCharacters()
-      .then((chars) => { setPopular(chars); setIsLoading(false) })
+      .then((chars) => {
+        setPopular(chars)
+        setIsLoading(false)
+        setCharCache(prev => { const m = new Map(prev); chars.forEach(c => m.set(c.id, c)); return m })
+      })
       .catch(() => { setLoadError(true); setIsLoading(false) })
   }, [])
+
+  useEffect(() => {
+    if (searchResults?.length) {
+      setCharCache(prev => { const m = new Map(prev); searchResults.forEach(c => m.set(c.id, c)); return m })
+    }
+  }, [searchResults])
 
   useEffect(() => {
     const q = search.trim()
@@ -113,9 +124,8 @@ export default function HomePage() {
     }
   }
 
-  const byId = new Map(popular.map((c) => [c.id, c]))
-  const teamAChars = teamA.map((id) => byId.get(id)).filter(Boolean) as Character[]
-  const teamBChars = teamB.map((id) => byId.get(id)).filter(Boolean) as Character[]
+  const teamAChars = teamA.map((id) => charCache.get(id)).filter(Boolean) as Character[]
+  const teamBChars = teamB.map((id) => charCache.get(id)).filter(Boolean) as Character[]
   const canBattle = teamA.length > 0 && teamB.length > 0
 
   return (
