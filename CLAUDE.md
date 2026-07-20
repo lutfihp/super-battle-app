@@ -4,9 +4,11 @@
 
 Next.js 16 frontend for SuperBattle — DC character battle story generator. Fully implemented. Connects to the FastAPI backend at `super-battle-api/`.
 
-## Status: Complete — pushed to origin (2026-06-09)
+## Status: Complete — deployed (last touched 2026-07-20)
 
-All pages and components are built, TypeScript clean, production build passes. Pushed to `main` — GitHub Actions will deploy on push. Follow `DEPLOY.md` (parent folder) for VPS one-time setup if not done yet.
+All pages and components are built, TypeScript clean, production build passes. Deployed. Follow `DEPLOY.md` (parent folder) for VPS one-time setup if not done yet.
+
+**2026-07-20 copy update (commit `be1d1b0`):** `/how-it-works` copy was updated to reflect the backend LLM swap from Groq (`llama-3.3-70b-versatile`) to Fireworks (`gpt-oss-120b`). Changes were copy-only — no layout, animation, or component structure changed. Affected files: `lib/how-data.ts`, `app/how-it-works/page.tsx`, `components/how/CacheBars.tsx`. If working in any of these, be aware the LLM provider is now Fireworks and the cache-miss latency reflects that (~3s, not ~1.4s). Node id in `ARCH_NODES` was renamed `groq` → `fireworks`; the `ARCH_EDGES` tuple `['fastapi', 'fireworks']` uses the new id.
 
 ## Run locally
 
@@ -190,6 +192,8 @@ CSS classes live in `app/globals.css` under `/* ── Footer ── */`. `Githu
 
 ## Next steps
 
-1. Follow `DEPLOY.md` for VPS one-time setup (DNS → dirs → .env → nginx → SSL → GitHub Secrets) if not yet done
-2. Visual QA with backend running after first deploy
-3. Replace stub Portrait with real character images using `next/image` once art is available
+Nothing blocking. Deployed, TypeScript clean, /how-it-works copy in sync with the backend Fireworks integration.
+
+Optional follow-ups:
+1. Replace stub Portrait with real character images using `next/image` once art is available
+2. Spot-check `/how-it-works` visuals across weight classes and confirm the animation timings still feel right with the new copy density (Section 4 lost one prompt segment when the JSON-array rule was removed)
