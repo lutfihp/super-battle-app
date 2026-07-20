@@ -69,7 +69,7 @@ export default function HowItWorksPage() {
         visual={<FlowStepper />}
         lead="The winner is always determined mathematically before the AI is ever called."
       >
-        <p className={styles.howP}>This guarantees the story matches the outcome — there&apos;s no hallucination risk. The prompt simply tells Groq who won and asks it to write a narrative around that fact.</p>
+        <p className={styles.howP}>This guarantees the story matches the outcome — there&apos;s no hallucination risk. The prompt simply tells the LLM who won and asks it to write a narrative around that fact.</p>
         <p className={styles.howHint} style={{ fontFamily: 'var(--font-mono)' }}>Steps light up as you scroll. Gold = code path, blue = cache miss.</p>
       </HowSection>
 
@@ -79,8 +79,8 @@ export default function HowItWorksPage() {
         visual={<CacheBars />}
         lead="Every unique matchup is stored after its first generation."
       >
-        <p className={styles.howP}>The matchup key is order-independent — A vs B is the same key as B vs A. On a cache hit, the response bypasses Groq entirely and returns in under 50ms.</p>
-        <p className={styles.howP}>This keeps Groq&apos;s free tier (30 RPM / 14,400 RPD) well within limits and gives repeat visitors near-instant results. Over time the most popular matchups are always served from cache; Groq is only called for genuinely new combinations.</p>
+        <p className={styles.howP}>The matchup key is order-independent — A vs B is the same key as B vs A. On a cache hit, the response bypasses the LLM entirely and returns in under 100ms.</p>
+        <p className={styles.howP}>Cache hits matter more now than they used to. Each miss calls Fireworks for ~3 seconds and costs a fraction of a cent; each hit is a single Supabase read. Over time the most popular matchups are always served from cache — the LLM is only called for genuinely new combinations, which keeps both latency and spend near zero for repeat visitors.</p>
       </HowSection>
 
       {/* S4 — Prompt Engineering */}
@@ -89,7 +89,7 @@ export default function HowItWorksPage() {
         visual={<PromptInspector />}
         lead="LLMs tend to narrate toward whoever pop-culture says should win."
       >
-        <p className={styles.howP}>By injecting the winner as a hard constraint, we override that bias entirely. The named powers from Comic Vine give Groq specific vocabulary instead of generic superhero language.</p>
+        <p className={styles.howP}>By injecting the winner as a hard constraint, we override that bias entirely. The named powers from Comic Vine give the LLM specific vocabulary instead of generic superhero language.</p>
         <p className={styles.howP}>Asking for structured JSON output (instead of prose) makes the sentence-by-sentence reveal animation trivial to implement on the frontend.</p>
         <p className={styles.howHint} style={{ fontFamily: 'var(--font-mono)' }}>Hover a highlighted block to see the decision behind it.</p>
       </HowSection>

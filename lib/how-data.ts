@@ -44,9 +44,9 @@ export const ARCH_NODES: Record<string, ArchNode> = {
   supabase: { x: 96,  y: 430, w: 184, h: 64,
     label: 'Supabase Postgres', icon: 'db',
     tip: 'Postgres cache — characters and battle stories stored here to minimize API calls.' },
-  groq:     { x: 322, y: 430, w: 176, h: 64,
-    label: 'Groq API', icon: 'ai',
-    tip: 'LLM inference — called only on cache miss. Generates the 8-sentence battle story.' },
+  fireworks: { x: 322, y: 430, w: 176, h: 64,
+    label: 'gpt-oss-120b via Fireworks', icon: 'ai',
+    tip: "LLM inference — called only on cache miss. OpenAI's 120B open-weight model hosted on Fireworks serverless." },
   sources:  { x: 540, y: 430, w: 204, h: 64,
     label: 'SuperHero API · Comic Vine', icon: 'ext',
     tip: 'Character data sources — seeded once at deploy, rarely called again.' },
@@ -54,7 +54,7 @@ export const ARCH_NODES: Record<string, ArchNode> = {
 
 export const ARCH_EDGES: [string, string][] = [
   ['browser', 'nginx'], ['nginx', 'next'], ['nginx', 'fastapi'],
-  ['fastapi', 'supabase'], ['fastapi', 'groq'], ['fastapi', 'sources'],
+  ['fastapi', 'supabase'], ['fastapi', 'fireworks'], ['fastapi', 'sources'],
 ]
 
 export const FLOW_STEPS: FlowStep[] = [
@@ -70,8 +70,8 @@ export const FLOW_STEPS: FlowStep[] = [
     body: 'An order-independent matchup key is built, then looked up in the battles table.',
     code: "key = sorted(team_a) + '_vs_' + sorted(team_b)" },
   { n: 5, title: 'Generate story', icon: 'ai', path: 'miss',
-    body: 'On a miss: build the prompt with names, powers, and the pre-decided winner, then call Groq (Llama 3.3 70B).',
-    code: '→ Groq · parse JSON array of 8 sentences' },
+    body: 'On a miss: build the prompt with names, powers, and the pre-decided winner, then call gpt-oss-120b via Fireworks.',
+    code: '→ Fireworks · parse 8 sentences' },
   { n: 6, title: 'Cache & respond', icon: 'save', path: 'miss',
     body: 'Store the story under its matchup key, then return story, winner, and both scores.',
     code: '{ story[], winner, score_a, score_b }' },
@@ -90,20 +90,16 @@ export const PROMPT_SEGMENTS: PromptSegment[] = [
   { kind: 'plain', text: '' },
   { kind: 'hl-blue',
     text: 'Team B: Mortis, Warlock\nPowers: Dread aura, Rift manipulation,\n        Tactical genius, Hex casting',
-    tip: 'Named abilities give Groq specific vocabulary to use, instead of generic superhero language.' },
+    tip: 'Named abilities give the LLM specific vocabulary to use, instead of generic superhero language.' },
   { kind: 'plain', text: '' },
   { kind: 'hl-gold',
     text: 'Winner: Team A   ← injected by code, not the AI',
-    tip: 'The winner is decided by stat math before this prompt is built. We tell Groq who won — it never guesses.' },
+    tip: 'The winner is decided by stat math before this prompt is built. We tell the LLM who won — it never guesses.' },
   { kind: 'plain', text: '' },
   { kind: 'plain', text: 'Rules:' },
   { kind: 'hl-muted',
-    text: '- 8 sentences total\n- Odd sentences favor Team A\n- Even sentences favor Team B\n- Sentence 7 is the turning point\n- Sentence 8 declares Team A the winner\n- No numbers or stats; each under 30 words',
-    tip: 'Alternating focus gives both teams screen time. Sentence 7 as the turning point gives the story a dramatic arc.' },
-  { kind: 'plain', text: '' },
-  { kind: 'hl-green',
-    text: '- Return ONLY a JSON array of 8 strings',
-    tip: 'Asking for a JSON array instead of prose makes parsing reliable and powers the one-by-one reveal animation.' },
+    text: '- 8 sentences total\n- Sentences 1–2: setup\n- Sentences 3–6: escalating clash\n- Sentence 7: decisive strike by the winner\n- Sentence 8: aftermath — name the victors',
+    tip: 'The narrative arc is enforced in the prompt: setup, escalation, decisive strike by the winning side in sentence 7, and an aftermath that names the victors in sentence 8.' },
 ]
 
 export const PIPE_NODES: Record<string, PipeNode> = {
@@ -124,8 +120,8 @@ export const STACK: StackCard[] = [
     why: 'App Router gives server components for the initial character load — no client-side waterfall on first paint.' },
   { name: 'FastAPI', sub: 'Python · single worker · ~80MB idle',
     why: 'Chosen over NestJS and .NET for the lowest Docker RAM footprint. One Uvicorn worker idles at ~80MB — it matters on a shared 1GB droplet.' },
-  { name: 'Groq API', sub: 'Llama 3.3 70B · 14,400 req/day free',
-    why: '30 RPM and 14,400 req/day free — ~10× more generous than Gemini Flash. LPU inference also means near-instant story generation.' },
+  { name: 'gpt-oss-120b via Fireworks', sub: 'OpenAI open-weight · serverless · ~$0.0005 per miss',
+    why: "OpenAI's 120B open-weight model hosted on Fireworks serverless. Slower per-call than a dedicated LPU host, but ~10× cheaper than the alternatives on the same platform. The battles cache smooths over the latency — most matchups return instantly from Supabase; the LLM is only called for genuinely new combinations." },
   { name: 'Supabase', sub: 'Postgres · free-tier cache',
     why: 'Postgres on the free tier. Relational schema fits perfectly, with a built-in REST API and Python SDK. Picked over MongoDB Atlas for structured data and no cold-start lag.' },
   { name: 'Docker Compose', sub: '2 containers · 1 droplet',

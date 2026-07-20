@@ -27,7 +27,7 @@ function useCountUp(target: number, run: boolean, duration = 1100) {
 
 const BARS = [
   { label: 'Cache HIT',  ms: '~40ms',     note: 'Supabase read only',        pct: 12,  hit: true },
-  { label: 'Cache MISS', ms: '~1,400ms',  note: 'Supabase + Groq + write',   pct: 100, hit: false },
+  { label: 'Cache MISS', ms: '~3s',       note: 'Supabase + Fireworks + write', pct: 100, hit: false },
 ]
 
 export function CacheBars() {
